@@ -134,6 +134,9 @@ class ElectrumClient extends Client {
   blockchainScripthash_subscribe(scripthash) {
     return this.request('blockchain.scripthash.subscribe', [scripthash]);
   }
+  blockchainBlock_header(height) {
+    return this.request('blockchain.block.header', [height]);
+  }
   blockchainBlock_headers(start_height, count) {
     return this.request('blockchain.block.headeres', [start_height, count]);
   }
