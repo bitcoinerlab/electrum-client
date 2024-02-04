@@ -13,6 +13,7 @@ Electrum Protocol Client for React Native
 * batch requests
 * works in RN and nodejs
 * both clearnet TCP and TLS
+* zero dependencies
 
 ## protocol spec
 
@@ -45,3 +46,6 @@ one of the ways to shim it is via `package.json`:
     }
 ```
 
+# license
+
+MIT
