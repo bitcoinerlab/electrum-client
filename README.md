@@ -12,6 +12,7 @@ Electrum Protocol Client for React Native
 * persistence (ping strategy and reconnection)
 * batch requests
 * works in RN and nodejs
+* both clearnet TCP and TLS
 
 ## protocol spec
 
@@ -19,15 +20,8 @@ Electrum Protocol Client for React Native
 
 ## usage
 
-Relies on `react-native-tcp` so it should be already installed and linked in RN project. `net` & `tls` dependencies should be
-injected via constructor, this library won't do `require('net')`.
-For RN you can place it in `shim.js`:
-
-```javascript
-  global.net = require('react-native-tcp');
-```
-
-For nodejs simply
+For Nodejs you can just provide standard modules `net` & `tls` to constructor explicitly, this
+library won't do `require('net')`.
 
 ```javascript
   const net = require('net');
@@ -40,3 +34,14 @@ and then
   const ver = await client.initElectrum({ client: 'bluewallet', version: '1.4' });
   const balance = await client.blockchainScripthash_getBalance('716decbe1660861c3d93906cb1d98ee68b154fd4d23aed9783859c1271b52a9c');
 ```
+
+For React Native luckily we have `react-native-tcp-socket` which mimics `net` & `tls` pretty closely,
+one of the ways to shim it is via `package.json`:
+
+```json
+    "react-native": {
+      "net": "react-native-tcp-socket",
+      "tls": "react-native-tcp-socket"
+    }
+```
+
