@@ -4,6 +4,7 @@ Electrum Protocol Client for React Native
 
 # based on
 
+* https://github.com/BlueWallet/rn-electrum-client
 * https://github.com/you21979/node-electrum-client
 * https://github.com/7kharov/node-electrum-client
 

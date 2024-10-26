@@ -1,6 +1,7 @@
 {
-  "name": "electrum-client",
-  "version": "3.1.0",
+  "name": "@bitcoinerlab/electrum-client",
+  "homepage": "https://github.com/bitcoinerlab/electrum-client",
+  "version": "1.0.0",
   "description": "Electrum protocol client for React Native & Node.js",
   "main": "index.js",
   "scripts": {
@@ -10,10 +11,10 @@
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "git://github.com/BlueWallet/rn-electrum-client.git"
+    "url": "git://github.com/bitcoinerlab/electrum-client.git"
   },
   "bugs": {
-    "url": "https://github.com/BlueWallet/rn-electrum-client/issues"
+    "url": "https://github.com/bitcoinerlab/electrum-client/issues"
   },
   "keywords": [
     "client",
@@ -26,7 +27,8 @@
   "contributors": [
     { "name": "Yuki Akiyama" },
     { "name": "7kharov" },
-    { "name": "overtorment" }
+    { "name": "overtorment" },
+    { "name": "Jose-Luis Landabaso @bitcoinerlab" }
   ],
   "license": "MIT"
 }
