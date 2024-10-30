@@ -10,11 +10,13 @@ export default class ElectrumClient {
     protocol: string,
   );
 
-  initElectrum(options: {
-    client: string;
-    version: string;
-    persistencePolicy?: { maxRetry: number; callback: (() => void) | null };
-  }): Promise<void>;
+  initElectrum(
+    elecrumConfig: {
+      client: string;
+      version: string;
+    },
+    persistencePolicy?: { maxRetry: number; callback: (() => void) | null },
+  ): Promise<void>;
 
   subscribe: {
     on(eventName: string, callback: (data: any) => void): void;
@@ -45,8 +47,8 @@ export default class ElectrumClient {
   blockchain_relayfee(): Promise<number>;
   mempool_getFeeHistogram(): Promise<any[]>;
 
-  close(): Promise<void>;
-  reconnect(): Promise<void>;
+  close(): void;
+  reconnect(): void;
   keepAlive(): void;
 
   onError: (e: Error) => void;
