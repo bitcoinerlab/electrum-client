@@ -3,35 +3,11 @@
 const Client = require('./lib/client');
 
 class ElectrumClient extends Client {
-  constructor(net, tls, port, host, protocol, options) {
-    super(net, tls, port, host, protocol, options);
-    this.timeLastCall = 0;
-  }
 
   initElectrum(electrumConfig, persistencePolicy = { maxRetry: 1000, callback: null }) {
     this.persistencePolicy = persistencePolicy;
     this.electrumConfig = electrumConfig;
-    this.timeLastCall = 0;
     return this.connect().then(() => this.server_version(this.electrumConfig.client, this.electrumConfig.version));
-  }
-
-  // Override parent
-  request(method, params) {
-    this.timeLastCall = new Date().getTime();
-    const parentPromise = super.request(method, params);
-    return parentPromise.then(response => {
-      this.keepAlive();
-      return response;
-    });
-  }
-
-  requestBatch(method, params, secondParam) {
-    this.timeLastCall = new Date().getTime();
-    const parentPromise = super.requestBatch(method, params, secondParam);
-    return parentPromise.then(response => {
-      this.keepAlive();
-      return response;
-    });
   }
 
   onClose() {
@@ -53,33 +29,9 @@ class ElectrumClient extends Client {
     }, 1000);
   }
 
-  // ElectrumX persistancy
-  keepAlive() {
-    if (this.timeout != null) {
-      clearTimeout(this.timeout);
-    }
-    this.timeout = setTimeout(() => {
-      if (this.timeLastCall !== 0 && new Date().getTime() > this.timeLastCall + 5000) {
-        const pingTimer = setTimeout(() => {
-          if (this.timeout != null) {
-            this.onError(new Error('keepalive ping timeout'));
-          }
-        }, 9000);
-        this.server_ping().catch((reason) => {
-          console.log('keepalive ping failed because of', reason);
-          clearTimeout(pingTimer);
-        }).then(() => clearTimeout(pingTimer));
-      }
-    }, 5000);
-  }
-
   close() {
     super.close();
-    if (this.timeout != null) {
-      clearTimeout(this.timeout);
-      this.timeout = null;
-    }
-    this.reconnect = this.reconnect = this.onClose = this.keepAlive = () => {}; // dirty hack to make it stop reconnecting
+    this.reconnect = this.onClose = () => {}; // dirty hack to make it stop reconnecting
   }
 
   reconnect() {
