@@ -16,6 +16,7 @@ export default class ElectrumClient {
       version: string;
     },
     persistencePolicy?: { maxRetry: number; callback: (() => void) | null },
+    timeout?: number
   ): Promise<void>;
 
   subscribe: {

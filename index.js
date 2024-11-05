@@ -4,7 +4,8 @@ const Client = require('./lib/client');
 
 class ElectrumClient extends Client {
 
-  initElectrum(electrumConfig, persistencePolicy = { maxRetry: 1000, callback: null }) {
+  initElectrum(electrumConfig, persistencePolicy = { maxRetry: 1000, callback: null }, timeout = 0) {
+    this.timeout = timeout;
     this.persistencePolicy = persistencePolicy;
     this.electrumConfig = electrumConfig;
     return this.connect().then(() => this.server_version(this.electrumConfig.client, this.electrumConfig.version));
@@ -27,6 +28,32 @@ class ElectrumClient extends Client {
         this.reconnect();
       }
     }, 1000);
+  }
+
+  request(method, params) {
+    const parentPromise = super.request(method, params);
+
+    if (this.timeout > 0) {
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error(`Request timed out after ${this.timeout} ms.`)), this.timeout)
+      );
+      return Promise.race([parentPromise, timeoutPromise]);
+    }
+
+    return parentPromise;
+  }
+
+  requestBatch(method, params, secondParam) {
+    const parentPromise = super.requestBatch(method, params, secondParam);
+
+    if (this.timeout > 0) {
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error(`Request timed out after ${this.timeout} ms.`)), this.timeout)
+      );
+      return Promise.race([parentPromise, timeoutPromise]);
+    }
+
+    return parentPromise;
   }
 
   close() {
